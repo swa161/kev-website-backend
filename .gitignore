@@ -1,0 +1,71 @@
+# =========================================
+# Node.js & General Backend Ignore Rules
+# =========================================
+
+# Node modules (installed dependencies)
+node_modules/
+
+# Environment variables (secrets like passwords, API keys)
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Process ID files
+pids/
+*.pid
+*.pid.lock
+
+# Runtime data
+*.seed
+
+# Temporary build files and caches
+.lib-cov
+coverage/
+.nyc_output/
+.eslintcache
+.node_repl_history
+
+# Debugger output
+*.tgz
+
+# Yarn integrity file
+.yarn-integrity
+
+# Build output (React "npm run build")
+build/
+dist/
+
+# TypeScript build output
+out-tsc/
+
+# VSCode workspace settings
+.vscode/
+
+# JetBrains (WebStorm/IntelliJ) settings
+.idea/
+
+# macOS metadata files
+.DS_Store
+
+# Bower dependencies (old frontend tool)
+bower_components/
+
+# JSPM package manager
+jspm_packages/
+
+# TypeScript typings (older tools)
+typings/
+
+# NPM local cache
+.npm/
+
+# Ignore uploaded/generated images (keep folder but ignore contents)
+storage/images/*
+
+# But keep .gitkeep so folder stays in repo
+!storage/images/.gitkeep
