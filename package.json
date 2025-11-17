@@ -8,26 +8,32 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node . ",
-    "dev": "npm run build && nodemon nodemon ."
+    "dev": "nodemon nodemon ."
   },
   "author": "Kevin Wang",
   "license": "ISC",
   "dependencies": {
     "ajv": "^8.17.1",
     "dotenv": "^17.2.2",
+    "bcrypt": "^6.0.0",
+    "rand-token": "^1.0.1",
     "express": "^5.1.0",
+    "humps": "^2.0.1",
     "mongodb": "^6.18.0",
     "pg": "^8.16.3",
-    "winston": "^3.17.0"
-
+    "winston": "^3.17.0",
+    "mz": "^2.7.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
     "@types/pg": "^8.15.5",
+    "@types/humps": "^2.0.6",
+    "@types/bcrypt": "^6.0.0",
+    "@types/mz": "^2.7.9",
+    "nodemon": "^3.1.11",
     "tslint": "^6.1.3",
-    "typescript": "^5.5.3",
-    "nodemon": "^3.1.11"
+    "typescript": "^5.5.3"
   },
   "private": true
 }
