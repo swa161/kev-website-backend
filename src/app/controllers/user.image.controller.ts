@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import * as Users from "../models/user.model";
-// Write image model and import
+import {readImage, removeImage, addImage} from "../models/image.model";
 import Logger from "../../config/logger";
 import {getImageExtension} from "../models/imageTools"
 

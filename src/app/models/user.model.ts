@@ -8,6 +8,10 @@ const findUserByEmail = async (email: string): Promise<user> => {
     throw new Error("Not implemented yet");
 }
 
+const findUserByToken = async (token: string): Promise<user> => {
+    throw new Error("Not implemented yet");
+}
+
 const login = async(id: number, token: string): Promise<any> => {
     throw new Error("Not implemented yet");
 }
@@ -36,4 +40,17 @@ const removeImageName = async (id: number): Promise<void> => {
     throw new Error("Not implemented yet");
 }
 
-export {register, login, logout, updateUser, findUserByEmail, updateImageName, removeImageName, getImageName}
+const getCVname = async (id: number): Promise<string> => {
+    throw new Error("Not implemented yet");
+}
+
+const updateCVname = async (id: number): Promise<void> => {
+    throw new Error("Not implemented yet");
+}
+
+const removeCVname = async (id: number): Promise<void> => {
+    throw new Error("Not implemented yet");
+}
+export {register, login, logout, updateUser, findUserByEmail, findUserByToken, updateImageName, removeImageName, getImageName,
+    getCVname, updateCVname, removeCVname
+}

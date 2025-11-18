@@ -21,6 +21,6 @@ export default () => {
     });
 
     require('../app/routes/user.routes')(app);
-    // require('../app/routes/photo.routes')(app);
+    require('../app/routes/photo.routes')(app);
     return app
 }
