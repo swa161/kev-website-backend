@@ -10,7 +10,7 @@ export default () => {
     app.use(allowCrossOriginRequestsMiddleware);
     app.use(bodyParser.json());
     app.use(bodyParser.raw({type: 'text/plain'}));
-    app.use(bodyParser.raw({type: ['image/*'], limit: '5mb'}));
+    app.use(bodyParser.raw({type: ['image/*'], limit: '20mb'}));
 
     // debug
     app.use((req, res, next)=> {
