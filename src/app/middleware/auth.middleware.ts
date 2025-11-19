@@ -5,6 +5,11 @@ import Logger from "../../config/logger";
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token: string = req.header('X-Authorization')
+        if (!token) {
+            res.statusMessage = "Unauthorized";
+            res.status(401).send("Missing auth token");
+            return;
+        }
         const user = await findUserByToken(token);
         if (user === null) {
             res.statusMessage = "Unauthorized"
@@ -16,7 +21,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
 
     } catch (err) {
         Logger.error(err)
-        res.statusMessage = "Internal Server Error";
+        res.statusMessage = "Internal Server Error during authentication";
         res.status(500).send()
         return;
     }
