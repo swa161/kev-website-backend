@@ -38,7 +38,7 @@
       },
       "physicalAddress": {
         "type": "string",
-        "maxLength": 256
+        "maxLength": 512
       }
     },
     "required": [
@@ -69,5 +69,46 @@
       "password"
     ],
     "additionalProperties" : false
+  },
+  "user_edit": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 256
+      },
+      "description": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 1024
+      },
+      "phoneNumber": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 64
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "minLength": 1,
+        "maxLength": 512
+      },
+      "physicalAddress": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 256
+      },
+      "firstName": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      },
+      "lastName": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 64
+      }
+    }
   }
 }

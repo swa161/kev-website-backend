@@ -23,7 +23,7 @@ module.exports = (app: Express) => {
 
     app.route(rootUrl+'/users/:id')
         .get(user.viewUser)
-        .patch(user.update)
+        .patch(authenticate, user.update)
 
     app.route(rootUrl+'/users/:id/image')
         .get(userImage.getImage)

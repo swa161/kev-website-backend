@@ -1,5 +1,8 @@
 import Ajv from "ajv"
-const ajv = new Ajv({removeAdditional: 'all', strict: false, allErrors: true })
+const ajv = new Ajv({
+    removeAdditional: 'all',
+    strict: false,
+    allErrors: true});
 
 ajv.addFormat('email',/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i)
 ajv.addFormat('password', /^.{6,}$/);

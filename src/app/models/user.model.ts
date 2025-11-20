@@ -31,6 +31,12 @@ const findUserByToken = async (token: string): Promise<user> => {
     return result.rows.length === 0 ? null : camelizeKeys(result.rows[0]) as user;
 }
 
+const findUserById = async (id: number): Promise<user> => {
+    const query: string = `select * from profile where id = $1`
+    const result = await getPool().query(query, [id])
+    return result.rows.length === 0 ? null : camelizeKeys(result.rows[0]) as user;
+}
+
 // all this will do is set the aut token in the database
 const login = async(id: number, token: string): Promise<any> => {
     const query: string = `update profile set auth_token = $1 where id = $2`
@@ -46,12 +52,37 @@ const logout = async(id: number): Promise<any> => {
 }
 
 const view = async(id: number): Promise<any> => {
-    throw new Error("Not implemented yet");
+    const query: string = `select * from profile where id = $1`
+    const result = await getPool().query(query, [id])
+    return result.rows[0]
 }
 
-const updateUser = async(u: user): Promise<any> => {
-    throw new Error("Not implemented yet");
+const updateUser = async(u: user, id: number): Promise<any> => {
+    Logger.info(u)
+    const query: string = `update profile set
+                   title = $1,
+                   description = $2,
+                   phone_number = $3,
+                   email = $4,
+                   address = $5,
+                   first_name = $6,
+                   last_name = $7 where id = $8 RETURNING *`
+    const result = await getPool().query(query, [
+        u.title,
+        u.description,
+        u.phoneNumber,
+        u.email,
+        u.physicalAddress,
+        u.firstName,
+        u.lastName,
+        id])
+    return result.rows[0]
 }
+
+const updateUserPassword = async(email: string): Promise<any> => {
+    throw new Error("Not yet implemented")
+}
+
 
 const getImageName = async (id: number): Promise<string> => {
     throw new Error("Not implemented yet");
@@ -76,6 +107,6 @@ const updateCVname = async (id: number): Promise<void> => {
 const removeCVname = async (id: number): Promise<void> => {
     throw new Error("Not implemented yet");
 }
-export {register, login, logout, updateUser, findUserByEmail, findUserByToken, updateImageName, removeImageName, getImageName,
+export {register, login, logout, view, updateUser, findUserByEmail, findUserByToken, findUserById, updateImageName, removeImageName, getImageName,
     getCVname, updateCVname, removeCVname
 }
