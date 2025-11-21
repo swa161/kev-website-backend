@@ -24,6 +24,7 @@ module.exports = (app: Express) => {
     app.route(rootUrl+'/users/:id')
         .get(user.viewUser)
         .patch(authenticate, user.update)
+        .put(authenticate, user.updatePassword)
 
     app.route(rootUrl+'/users/:id/image')
         .get(userImage.getImage)

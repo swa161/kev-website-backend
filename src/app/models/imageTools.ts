@@ -8,11 +8,11 @@ const getImageMimeType = (filename: string): string => {
 const getImageExtension = (mimeType: string): string | null => {
     switch (mimeType) {
         case "image/jpeg":
-            return "image/jpeg";
+            return ".jpeg";
         case  "image/png":
-            return "image/png";
+            return ".png";
         case "image/gif":
-            return "image/gif";
+            return ".gif";
         default:
             return null;
     }

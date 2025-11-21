@@ -43,6 +43,11 @@ const login = async (req: Request, res: Response) => {
             return
         }
         const user = await User.findUserByEmail(req.body.email)
+        if (user.authToken !== null) {
+            res.statusMessage = 'User Already Logged In'
+            res.status(403).send()
+            return
+        }
         if (user === null || !await password.compare(req.body.password, user.password)) {
             res.statusMessage = `Invalid email or password`
             res.status(401).send()
@@ -162,4 +167,51 @@ const update = async (req: Request, res: Response) => {
     }
 }
 
-export {register, login, viewUser, logout, update}
+const updatePassword = async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id, 10)
+        if (isNaN(id)) {
+            res.statusMessage = `Id must be an integer`
+            res.status(400).send()
+            return
+        }
+        const user = await User.findUserById(id)
+        if (user === null) {
+            res.statusMessage = `User does not exist`
+            res.status(404).send()
+            return
+        }
+        if (req.authId !== id) {
+            res.statusMessage = `You do not have the authority`
+            res.status(403).send()
+            return
+        }
+        const validation = await validate(schemas.user_edit_password, req.body)
+        if (validation !== true) {
+            res.statusMessage = `Bad Request: ${validation.toString()}`
+            res.status(400).send()
+            return
+        }
+        if (!await password.compare(req.body.currentPassword, user.password)) {
+            res.statusMessage = `Incorrect current password`
+            res.status(401).send()
+            return
+        }
+        if (await password.compare(req.body.newPassword, user.password)) {
+            res.statusMessage = 'New password cannot be the same as old password'
+            res.status(403).send()
+            return
+        }
+        user.password = await password.hash(req.body.newPassword)
+        await User.updateUserPassword(user.password, id)
+        res.status(200).send()
+        return
+    } catch (err) {
+        Logger.error(err.toString())
+        res.statusMessage = "Internal Server Error"
+        res.status(500).send()
+        return
+    }
+}
+
+export {register, login, viewUser, logout, update, updatePassword}

@@ -58,7 +58,6 @@ const view = async(id: number): Promise<any> => {
 }
 
 const updateUser = async(u: user, id: number): Promise<any> => {
-    Logger.info(u)
     const query: string = `update profile set
                    title = $1,
                    description = $2,
@@ -79,21 +78,30 @@ const updateUser = async(u: user, id: number): Promise<any> => {
     return result.rows[0]
 }
 
-const updateUserPassword = async(email: string): Promise<any> => {
-    throw new Error("Not yet implemented")
+const updateUserPassword = async(newPassword: string, id: number): Promise<any> => {
+    const query: string = `update profile set password = $1 where id = $2`
+    const result = await getPool().query(query, [newPassword, id])
+    return result
+
 }
 
 
 const getImageName = async (id: number): Promise<string> => {
-    throw new Error("Not implemented yet");
+    const query: string = `select image_filename from profile where id = $1`
+    const result = await getPool().query(query, [id])
+    return result.rows[0].image_filename
 }
 
-const updateImageName = async (id: number): Promise<string> => {
-    throw new Error("Not implemented yet");
+const updateImageName = async (id: number, imageName: string): Promise<string> => {
+    const query: string = `update profile set image_filename = $1 where id = $2`
+    const result = await getPool().query(query, [imageName, id])
+    return result.rows[0]
 }
 
 const removeImageName = async (id: number): Promise<void> => {
-    throw new Error("Not implemented yet");
+    const query: string = `update profile set image_filename = $1 where id = $2`
+    const result = await getPool().query(query, [null,id])
+    return result.rows[0]
 }
 
 const getCVname = async (id: number): Promise<string> => {
@@ -107,6 +115,6 @@ const updateCVname = async (id: number): Promise<void> => {
 const removeCVname = async (id: number): Promise<void> => {
     throw new Error("Not implemented yet");
 }
-export {register, login, logout, view, updateUser, findUserByEmail, findUserByToken, findUserById, updateImageName, removeImageName, getImageName,
+export {register, login, logout, view, updateUser, findUserByEmail, findUserByToken, findUserById, updateImageName,updateUserPassword, removeImageName, getImageName,
     getCVname, updateCVname, removeCVname
 }

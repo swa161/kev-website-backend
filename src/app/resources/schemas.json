@@ -110,5 +110,27 @@
         "maxLength": 64
       }
     }
+  },
+  "user_edit_password": {
+    "type": "object",
+    "properties": {
+      "currentPassword": {
+        "type": "string",
+        "format": "password",
+        "minLength": 6,
+        "maxLength": 64
+      },
+      "newPassword": {
+        "type": "string",
+        "format": "password",
+        "minLength": 6,
+        "maxLength": 64
+      }
+    },
+    "required": [
+      "currentPassword",
+      "newPassword"
+
+    ]
   }
 }
