@@ -11,6 +11,7 @@ export default () => {
     app.use(bodyParser.json());
     app.use(bodyParser.raw({type: 'text/plain'}));
     app.use(bodyParser.raw({type: ['image/*'], limit: '20mb'}));
+    app.use(bodyParser.raw({type: ['application/*'], limit: '10mb'}));
 
     // debug
     app.use((req, res, next)=> {

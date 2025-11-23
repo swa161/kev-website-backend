@@ -6,7 +6,7 @@ const getFileMimeType = (filename: string): string => {
 const getFileExtension = (mimeType: string): string => {
     switch (mimeType) {
         case "application/pdf":
-            return "application/pdf";
+            return ".pdf";
         default:
             return null;
     }

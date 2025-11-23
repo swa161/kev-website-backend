@@ -14,6 +14,7 @@ const removeImage = async (filename: string) => {
     if (filename) {
         if (await fs.exists(filepath+filename)) {
             await fs.unlink(filepath+filename);
+            Logger.info("CV removed")
         }
     }
 }

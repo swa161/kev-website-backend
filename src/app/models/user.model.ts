@@ -105,15 +105,21 @@ const removeImageName = async (id: number): Promise<void> => {
 }
 
 const getCVname = async (id: number): Promise<string> => {
-    throw new Error("Not implemented yet");
+    const query: string = `select cv_filename from profile where id = $1`
+    const result = await getPool().query(query, [id])
+    return result.rows[0].cv_filename
 }
 
-const updateCVname = async (id: number): Promise<void> => {
-    throw new Error("Not implemented yet");
+const updateCVname = async (id: number, filename: string): Promise<void> => {
+    const query: string = `update profile set cv_filename = $1 where id = $2`
+    const result = await getPool().query(query, [filename,id])
+    return
 }
 
 const removeCVname = async (id: number): Promise<void> => {
-    throw new Error("Not implemented yet");
+    const query: string = `update profile set cv_filename = $1 where id = $2`
+    const result = await getPool().query(query, [null,id])
+    return
 }
 export {register, login, logout, view, updateUser, findUserByEmail, findUserByToken, findUserById, updateImageName,updateUserPassword, removeImageName, getImageName,
     getCVname, updateCVname, removeCVname
