@@ -132,5 +132,20 @@
       "newPassword"
 
     ]
+  },
+  "photo_create": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 512
+      },
+      "description": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 1024
+      }
+    }
   }
 }

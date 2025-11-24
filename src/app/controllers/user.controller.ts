@@ -14,7 +14,6 @@ const register = async (req: Request, res: Response) => {
             res.status(400).send()
             return
         }
-        Logger.info(req.body)
         req.body.password = await password.hash(req.body.password)
         const result = await User.register(req.body)
         res.status(201).send({userID: result.id})
