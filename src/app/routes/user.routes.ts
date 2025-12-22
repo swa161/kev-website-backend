@@ -31,6 +31,9 @@ module.exports = (app: Express) => {
         .put(authenticate,userImage.setImage)
         .delete(authenticate,userImage.deleteImage)
 
+    app.route(rootUrl+'/users/:id/name')
+        .get(user.getFullName)
+
     app.route(rootUrl+'/users/:id/cv')
         .get(userCV.getCV)
         .put(authenticate,userCV.setCV)

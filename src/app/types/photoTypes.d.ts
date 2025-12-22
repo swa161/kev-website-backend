@@ -2,6 +2,7 @@ type photoCreate = {
     title: string,
     image_url: string,
     description: string,
+    created_at: string
 }
 
 type photo = {

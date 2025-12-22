@@ -15,7 +15,7 @@ const removeOnePhoto = async (id: number): Promise<void> => {
 
 const addPhoto = async (p: photoCreate): Promise<number> => {
     const query = `insert into photos (title,description, image_url,created_at) values ($1, $2, $3, $4)`
-    const result = await getPool().query(query,[p.title,p.description,p.image_url, new Date()]);
+    const result = await getPool().query(query,[p.title,p.description,p.image_url, p.created_at]);
     return result.rows[0];
 }
 
@@ -25,5 +25,11 @@ const getPhotoById = async (id: number): Promise<photo> => {
     return result.rows[0];
 }
 
-export {getAllPhoto, removeOnePhoto, addPhoto, getPhotoById}
+const getPhotoName = async (photoId: number): Promise<string> => {
+    const query = `select image_url from photos where id = $1`
+    const result = await getPool().query(query, [photoId]);
+    return result.rows[0].image_url;
+}
+
+export {getAllPhoto, removeOnePhoto, addPhoto, getPhotoById, getPhotoName}
 

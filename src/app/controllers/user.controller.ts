@@ -94,7 +94,7 @@ const viewUser = async (req: Request, res: Response) => {
             res.status(404).send()
             return
         }
-        res.status(200).send({userId: user})
+        res.status(200).send(user)
         return
 
     } catch (err) {
@@ -104,6 +104,33 @@ const viewUser = async (req: Request, res: Response) => {
         return
     }
 
+}
+
+const getFullName = async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id, 10)
+        if (isNaN(id)) {
+            res.statusMessage = `Id must be an integer`
+            res.status(400).send()
+            return
+        }
+        const user = await User.view(id)
+        if(user === null) {
+            res.statusMessage = `User does not exist`
+            res.status(404).send()
+            return
+        }
+        res.status(200).send({fullName: `${user.first_name} ${user.last_name}`})
+        return
+
+
+    } catch (err) {
+        Logger.error(err.toString())
+        res.statusMessage = "Internal Server Error"
+        res.status(500).send()
+        return
+
+    }
 }
 
 const update = async (req: Request, res: Response) => {
@@ -213,4 +240,4 @@ const updatePassword = async (req: Request, res: Response) => {
     }
 }
 
-export {register, login, viewUser, logout, update, updatePassword}
+export {register, login, viewUser, logout, update, updatePassword, getFullName}
