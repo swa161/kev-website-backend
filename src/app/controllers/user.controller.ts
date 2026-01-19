@@ -141,13 +141,13 @@ const update = async (req: Request, res: Response) => {
             res.status(400).send()
             return
         }
-        const user = await User.findUserById(id)
-        if (user === null) {
-            res.statusMessage = `User does not exist`
-            res.status(404).send()
-            return
-        }
-        Logger.info(req.authId)
+        // const user = await User.findUserById(id)
+        // if (user === null) {
+        //     res.statusMessage = `User does not exist`
+        //     res.status(404).send()
+        //     return
+        // }
+
         if (req.authId !== id) {
             res.statusMessage = `You do not have the authority`
             res.status(403).send()
@@ -159,29 +159,29 @@ const update = async (req: Request, res: Response) => {
             res.status(400).send()
             return
         }
-        Logger.info(req.body)
-        if (req.body.hasOwnProperty("email")) {
-            user.email = req.body.email
-        }
-        if (req.body.hasOwnProperty("title")) {
-            user.title = req.body.title
-        }
-        if (req.body.hasOwnProperty("description")) {
-            user.description = req.body.description
-        }
-        if (req.body.hasOwnProperty("physicalAddress")) {
-            user.physicalAddress = req.body.physicalAddress
-        }
-        if (req.body.hasOwnProperty("phoneNumber")) {
-            user.phoneNumber = req.body.phoneNumber
-        }
-        if (req.body.hasOwnProperty("firstName")) {
-            user.firstName = req.body.firstName
-        }
-        if (req.body.hasOwnProperty("lastName")) {
-            user.lastName = req.body.lastName
-        }
-        await User.updateUser(user, id)
+
+        // if (req.body.hasOwnProperty("email")) {
+        //     user.email = req.body.email
+        // }
+        // if (req.body.hasOwnProperty("title")) {
+        //     user.title = req.body.title
+        // }
+        // if (req.body.hasOwnProperty("description")) {
+        //     user.description = req.body.description
+        // }
+        // if (req.body.hasOwnProperty("physicalAddress")) {
+        //     user.physicalAddress = req.body.physicalAddress
+        // }
+        // if (req.body.hasOwnProperty("phoneNumber")) {
+        //     user.phoneNumber = req.body.phoneNumber
+        // }
+        // if (req.body.hasOwnProperty("firstName")) {
+        //     user.firstName = req.body.firstName
+        // }
+        // if (req.body.hasOwnProperty("lastName")) {
+        //     user.lastName = req.body.lastName
+        // }
+        await User.updateUserPartial(req.body, id)
         res.status(200).send()
         return
 

@@ -57,24 +57,67 @@ const view = async(id: number): Promise<any> => {
     return result.rows[0]
 }
 
-const updateUser = async(u: user, id: number): Promise<any> => {
-    const query: string = `update profile set
-                   title = $1,
-                   description = $2,
-                   phone_number = $3,
-                   email = $4,
-                   address = $5,
-                   first_name = $6,
-                   last_name = $7 where id = $8 RETURNING *`
-    const result = await getPool().query(query, [
-        u.title,
-        u.description,
-        u.phoneNumber,
-        u.email,
-        u.physicalAddress,
-        u.firstName,
-        u.lastName,
-        id])
+const updateUserPartial = async(u: Partial<user>, id: number): Promise<any> => {
+    // const query: string = `update profile set
+    //                title = $1,
+    //                description = $2,
+    //                phone_number = $3,
+    //                email = $4,
+    //                address = $5,
+    //                first_name = $6,
+    //                last_name = $7 where id = $8 RETURNING *`
+    // const result = await getPool().query(query, [
+    //     u.title,
+    //     u.description,
+    //     u.phoneNumber,
+    //     u.email,
+    //     u.physicalAddress,
+    //     u.firstName,
+    //     u.lastName,
+    //     id])
+    const fields = []
+    const values = []
+    let index = 1;
+
+    if (u.title !== undefined) {
+        fields.push(`title = $${index++}`)
+        values.push(u.title)
+    }
+
+    if (u.description !== undefined) {
+        fields.push(`description = $${index++}`)
+        values.push(u.description)
+    }
+    if (u.phoneNumber !== undefined) {
+        fields.push(`phone_number = $${index++}`)
+        values.push(u.phoneNumber)
+    }
+    if (u.email !== undefined) {
+        fields.push(`email = $${index++}`)
+        values.push(u.email)
+    }
+    if (u.physicalAddress !== undefined) {
+        fields.push(`address = $${index++}`)
+        values.push(u.physicalAddress)
+    }
+    if (u.firstName !== undefined) {
+        fields.push(`first_name = $${index++}`)
+        values.push(u.firstName)
+    }
+    if (u.lastName !== undefined) {
+        fields.push(`last_name = $${index++}`)
+        values.push(u.lastName)
+    }
+    if (fields.length === 0 ) return null
+    values.push(id)
+
+    const query = `
+    UPDATE profile
+    SET ${fields.join(', ')}
+    WHERE id = $${index}
+    RETURNING *`
+    const result = await getPool().query(query, values)
+
     return result.rows[0]
 }
 
@@ -121,6 +164,6 @@ const removeCVname = async (id: number): Promise<void> => {
     const result = await getPool().query(query, [null,id])
     return
 }
-export {register, login, logout, view, updateUser, findUserByEmail, findUserByToken, findUserById, updateImageName,updateUserPassword, removeImageName, getImageName,
+export {register, login, logout, view, updateUserPartial, findUserByEmail, findUserByToken, findUserById, updateImageName,updateUserPassword, removeImageName, getImageName,
     getCVname, updateCVname, removeCVname
 }

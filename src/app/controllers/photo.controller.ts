@@ -26,8 +26,8 @@ const addPhoto = async (req: Request, res: Response): Promise<void> => {
             res.status(400).send()
             return
         }
-        const d = new Date()
-        const creationDate = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}`
+        // const d = new Date()
+        // const creationDate = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}`
         const formData = req.body
         const mimeType = req.file.mimetype
         const imageExt = getImageExtension(mimeType)
@@ -43,7 +43,7 @@ const addPhoto = async (req: Request, res: Response): Promise<void> => {
         }
         const filename = await addImage(req.file.buffer, imageExt)
         formData.image_url = filename
-        formData.created_at = creationDate
+        // formData.created_at = creationDate
         await Photo.addPhoto(formData as photoCreate)
         res.status(200).send()
         return
