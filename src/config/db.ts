@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import { Pool } from "pg";
 import Logger from "./logger"
 
+
+
 // Load environment variables into process.env
 dotenv.config();
 
@@ -12,12 +14,12 @@ const state = {
 const connect = async () => {
     // create a new pool using environment variables
     state.pool = new Pool({
-        host: process.env.PGHOST,
-        user: process.env.PGUSER,
-        password: process.env.PGPASS,
-        database: process.env.PGDATABASE,
-        port: Number(process.env.PGPORT)
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+        }
     });
+
     await state.pool.connect();
     Logger.info("Successfully connected to the database");
     return;
