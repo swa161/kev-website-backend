@@ -3,12 +3,12 @@ import express from './config/express'
 import Logger from './config/logger'
 
 const app = express();
-const port = 4941;
+const PORT = process.env.PORT || 3000;
 async function main() {
     try {
         await connect();
-        app.listen(port, ()=> {
-            Logger.info('Server started on port ' + port);
+        app.listen(PORT, ()=> {
+            Logger.info('Server started on port ' + PORT);
         });
     } catch (err) {
         Logger.error("Unable to connect to the database");

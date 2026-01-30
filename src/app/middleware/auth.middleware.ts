@@ -2,6 +2,8 @@ import {findUserByToken} from "../models/user.model";
 import {NextFunction, Request,Response} from "express";
 import Logger from "../../config/logger";
 
+
+
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token: string = req.header('X-Authorization')
