@@ -17,16 +17,30 @@ const connect = async () => {
         connectionString: process.env.DATABASE_URL,
         ssl: {
             rejectUnauthorized: false
-        }
+        },
+        max: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 10000
     });
+    state.pool.on("error", (err) => {
 
-    await state.pool.connect();
+        Logger.error("PostgreSQL pool error:", err.message);
+    });
+    await state.pool.query("SELECT 1");
+
+
     Logger.info("Successfully connected to the database");
     return;
 };
 
-const getPool =  () => {
-  return state.pool;
+const getPool = () => {
+    if (!state.pool) {
+        throw new Error("DB not initialized");
+    }
+    return state.pool;
 };
 
-export {connect, getPool};
+
+
+
+export { connect, getPool };
