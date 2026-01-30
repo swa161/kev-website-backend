@@ -64,8 +64,6 @@ typings/
 # NPM local cache
 .npm/
 
-# Ignore uploaded/generated images (keep folder but ignore contents)
-storage/images/*
 
 # But keep .gitkeep so folder stays in repo
 !storage/images/.gitkeep
