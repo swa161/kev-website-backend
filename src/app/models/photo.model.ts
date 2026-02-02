@@ -15,7 +15,7 @@ const removeOnePhoto = async (id: number): Promise<void> => {
 
 const addPhoto = async (p: photoCreate): Promise<number> => {
     const query = `insert into photos (title,description, image_url) values ($1, $2, $3)`
-    const result = await getPool().query(query,[p.title,p.description,p.image_url]);
+    const result = await getPool().query(query,[p.title,p.description, `photos/${p.image_url}`]);
     return result.rows[0];
 }
 

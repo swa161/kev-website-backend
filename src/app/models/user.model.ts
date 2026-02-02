@@ -130,19 +130,19 @@ const updateUserPassword = async(newPassword: string, id: number): Promise<any> 
 
 
 const getImageName = async (id: number): Promise<string> => {
-    const query: string = `select image_filename from profile where id = $1`
+    const query: string = `select image_url from profile where id = $1`
     const result = await getPool().query(query, [id])
-    return result.rows[0].image_filename
+    return result.rows[0].image_url
 }
 
 const updateImageName = async (id: number, imageName: string): Promise<string> => {
-    const query: string = `update profile set image_filename = $1 where id = $2`
+    const query: string = `update profile set image_url = $1 where id = $2`
     const result = await getPool().query(query, [imageName, id])
     return result.rows[0]
 }
 
 const removeImageName = async (id: number): Promise<void> => {
-    const query: string = `update profile set image_filename = $1 where id = $2`
+    const query: string = `update profile set image_url = $1 where id = $2`
     const result = await getPool().query(query, [null,id])
     return result.rows[0]
 }

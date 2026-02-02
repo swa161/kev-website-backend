@@ -13,6 +13,7 @@
   "author": "Kevin Wang",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.980.0",
     "ajv": "^8.17.1",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",

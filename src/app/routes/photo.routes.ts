@@ -16,7 +16,7 @@ module.exports = (app: Express) => {
         .get(photo.getOnePhoto)
         .delete(authenticate, photo.removePhoto);
 
-    app.route(rootUrl+'/photos/:photoId/image')
-        .get(photo.getPhotoImage)
+    // app.route(rootUrl+'/photos/:photoId/image')
+    //     .get(photo.getPhotoImage)
 
 }

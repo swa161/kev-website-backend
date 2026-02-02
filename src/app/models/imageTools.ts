@@ -20,4 +20,6 @@ const getImageExtension = (mimeType: string): string | null => {
             return null;
     }
 }
+
+
 export {getImageMimeType, getImageExtension}

@@ -14,21 +14,20 @@ const removeImage = async (filename: string) => {
     if (filename) {
         if (await fs.exists(filepath+filename)) {
             await fs.unlink(filepath+filename);
-            Logger.info("CV removed")
         }
     }
 }
 
-const addImage = async (image: any, fileExt: string): Promise<string> => {
+const generateImageName = async (fileExt: string): Promise<string> => {
     const filename = generate(32) + fileExt
      try {
-        await fs.writeFile(filepath+ filename, image);
+        // await fs.writeFile(filepath+ filename, image);
         return filename
      } catch (err) {
         Logger.error(err.toString());
-        fs.unlink(filepath+filename).catch(err => Logger.error(err.toString()));
+        // fs.unlink(filepath+filename).catch(err => Logger.error(err.toString()));
         throw err
      }
 }
 
-export {readImage, removeImage, addImage};
+export {readImage, removeImage, generateImageName};

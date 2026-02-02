@@ -1,12 +1,14 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import * as User from "../models/user.model";
-import {readImage, removeImage, addImage} from "../models/image.model";
+import { readImage, removeImage, generateImageName } from "../models/image.model";
 import Logger from "../../config/logger";
-import {getImageExtension} from "../models/imageTools"
+import { getImageExtension } from "../models/imageTools"
+import { uploadImageToR2, deleteImageFromR2 } from "../services/r2_service";
+
 
 const getImage = async (req: Request, res: Response) => {
     try {
-        const id = parseInt( req.params.id, 10)
+        const id = parseInt(req.params.id, 10)
         if (isNaN(id)) {
             res.statusMessage = 'Id must be an integer'
             res.status(400).send()
@@ -18,8 +20,8 @@ const getImage = async (req: Request, res: Response) => {
             res.status(404).send()
             return
         }
-        const [image, mimeType] = await readImage(filename)
-        res.status(200).contentType(mimeType).send(image)
+        const imageUrl = await User.getImageName(id)
+        res.status(200).send(imageUrl)
         return
     } catch (err) {
         Logger.error(err.toString());
@@ -52,7 +54,7 @@ const setImage = async (req: Request, res: Response) => {
         const mimeType = req.header('Content-Type');
         const imageExt = getImageExtension(mimeType);
         if (imageExt === null) {
-            res.statusMessage = `Bad Request: photo must be image/png, image/jpeg, image/git type, but it was: ${mimeType}`
+            res.statusMessage = `Bad Request: photo must be image/png, image/jpeg, image/gif type,, image/webp but it was: ${mimeType}`
             res.status(400).send()
             return
         }
@@ -61,18 +63,22 @@ const setImage = async (req: Request, res: Response) => {
             res.status(400).send()
             return
         }
-        const filename = await User.getImageName(id)
-        if (filename != null && filename !== "") {
-            await removeImage(filename)
+        const oldImageUrl = await User.getImageName(id)
+        if (oldImageUrl != null && oldImageUrl !== "") {
+            await deleteImageFromR2({ filePath: oldImageUrl })
             isNew = false
         }
-        const newFilename = await addImage(image, imageExt)
-        await User.updateImageName(id, newFilename)
+        const newFilename = `${id}`+imageExt
+        const newImageUrl = `profile/${newFilename}`
+        let code = 0
         if (isNew) {
-            res.status(201).send()
-        } else{
-            res.status(200).send()
+            code = 201
+        } else {
+            code = 200
         }
+        await uploadImageToR2({ file: image, fileName: newFilename, mimeType, directory: 'profile' })
+        await User.updateImageName(id, newImageUrl)
+        res.status(code).send()
         return
     } catch (err) {
         Logger.error(err.toString());
@@ -106,7 +112,7 @@ const deleteImage = async (req: Request, res: Response) => {
             res.status(404).send()
             return
         }
-        await removeImage(filename)
+        await deleteImageFromR2({filePath: filename})
         await User.removeImageName(id)
         res.status(200).send()
         return
@@ -117,4 +123,4 @@ const deleteImage = async (req: Request, res: Response) => {
     }
 }
 
-export {getImage, setImage, deleteImage};
+export { getImage, setImage, deleteImage };

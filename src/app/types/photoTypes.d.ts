@@ -8,6 +8,6 @@ type photo = {
     id: number,
     title: string,
     description: string,
-    photoUrl: string,
+    image_url: string,
     date: string
 }
