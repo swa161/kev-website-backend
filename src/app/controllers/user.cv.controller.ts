@@ -1,9 +1,9 @@
 import {Request, Response} from "express";
 import {getFileExtension} from "../models/fileTools";
-import {readFile, addFile, removeFile} from "../models/file.model";
 import * as User from '../models/user.model'
 import Logger from "../../config/logger"
-
+import { deleteImageFromR2, uploadImageToR2 } from "../services/r2_service";
+import { generateCVName} from '../models/file.model'
 
 const getCV = async(req: Request, res: Response) => {
     try {
@@ -19,12 +19,12 @@ const getCV = async(req: Request, res: Response) => {
             res.status(404).send()
             return
         }
-        const [file, mimetype] = await readFile(filename)
-        res.status(200).contentType(mimetype).send(file)
+        const cvName = await User.getCVname(id)
+        res.status(200).send(cvName)
         return
     } catch (err) {
         Logger.error(err.toString())
-        res.status(500).send("Internal Server Error")
+        res.status(500).send("Error happend during fetching CV name")
         return
     }
 }
@@ -64,10 +64,12 @@ const setCV = async (req: Request, res: Response) => {
         }
         const filename = await User.getCVname(id)
         if (filename != null && filename !== "") {
-            await removeFile(filename) // remove from disk
             isNew = false
         }
-        const newFilename = await addFile(file, fileExt)
+        const newFilename = await generateCVName(fileExt)
+        const oldCVName = await User.getCVname(id)
+        await deleteImageFromR2({filePath: oldCVName})
+        await uploadImageToR2({file: req.body, fileName: newFilename, mimeType, directory: 'cv'})
         await User.updateCVname(id, newFilename)
         if (isNew) {
             res.status(201).send()
@@ -110,7 +112,6 @@ const deleteCV = async (req: Request, res: Response) => {
             return
         }
         Logger.info("Removing CV")
-        await removeFile(filename)
         await User.removeCVname(id)
         res.status(200).send()
         return

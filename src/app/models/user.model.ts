@@ -155,7 +155,7 @@ const getCVname = async (id: number): Promise<string> => {
 
 const updateCVname = async (id: number, filename: string): Promise<void> => {
     const query: string = `update profile set cv_filename = $1 where id = $2`
-    const result = await getPool().query(query, [filename,id])
+    const result = await getPool().query(query, [`cv/${filename}`,id])
     return
 }
 
