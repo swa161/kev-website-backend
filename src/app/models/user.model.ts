@@ -58,23 +58,6 @@ const view = async(id: number): Promise<any> => {
 }
 
 const updateUserPartial = async(u: Partial<user>, id: number): Promise<any> => {
-    // const query: string = `update profile set
-    //                title = $1,
-    //                description = $2,
-    //                phone_number = $3,
-    //                email = $4,
-    //                address = $5,
-    //                first_name = $6,
-    //                last_name = $7 where id = $8 RETURNING *`
-    // const result = await getPool().query(query, [
-    //     u.title,
-    //     u.description,
-    //     u.phoneNumber,
-    //     u.email,
-    //     u.physicalAddress,
-    //     u.firstName,
-    //     u.lastName,
-    //     id])
     const fields = []
     const values = []
     let index = 1;

@@ -98,7 +98,9 @@ const viewUser = async (req: Request, res: Response) => {
         return
 
     } catch (err) {
-        Logger.error("DB query failed:", err);
+        Logger.error("DB query failed FULL:", err);
+        Logger.error("Type:", typeof err);
+        Logger.error("Keys:", Object.keys(err as any));
         res.status(500).json({ error: "Database error" });
         return
     }
