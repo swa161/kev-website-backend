@@ -98,9 +98,22 @@ const viewUser = async (req: Request, res: Response) => {
         return
 
     } catch (err) {
-        Logger.error("DB query failed FULL:", err);
-        Logger.error("Type:", typeof err);
-        Logger.error("Keys:", Object.keys(err as any));
+    Logger.error("DB query failed");
+
+    if (err && Array.isArray(err.errors)) {
+        Logger.error("AggregateError detected");
+        err.errors.forEach((e: any, i: number) => {
+            Logger.error(`Error ${i}:`, e);
+            Logger.error(`Message ${i}:`, e?.message);
+            Logger.error(`Code ${i}:`, e?.code);
+        });
+    } else if (err instanceof Error) {
+        Logger.error("Error message:", err.message);
+        Logger.error("Stack:", err.stack);
+    } else {
+        Logger.error("Unknown error type:", err);
+    }
+
         res.status(500).json({ error: "Database error" });
         return
     }

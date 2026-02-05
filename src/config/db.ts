@@ -21,13 +21,22 @@ const connect = async () => {
     // create a new pool using environment variables
     state.pool = new Pool({
         connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-        },
+        ssl: true,
         max: 5,
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 5000
     });
+
+    try {
+        const client = await state.pool.query('SELECT version()')
+        Logger.info("Successfully established a connection to PostgreSQL");
+    } catch (err) {
+        Logger.error("Failed to connect to the database on startup:", err);
+        throw err; 
+    }
+
+    
+
     state.pool.on("error", (err: any) => {
         Logger.error("PostgreSQL pool error:", err);
     });
