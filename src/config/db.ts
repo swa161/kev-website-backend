@@ -3,14 +3,9 @@ import { Pool } from "pg";
 import Logger from "./logger"
 
 
-// Load environment variables into process.env
-if (process.env.NODE_ENV !== "production") {
-    dotenv.config();
-}
 
-if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set");
-}
+// Load environment variables into process.env
+dotenv.config();
 
 const state = {
     pool: null as Pool | null
@@ -20,23 +15,19 @@ const connect = async () => {
     // create a new pool using environment variables
     state.pool = new Pool({
         connectionString: process.env.DATABASE_URL,
-        ssl: true,
-        max: 5,
+        ssl: {
+            rejectUnauthorized: false
+        },
+        max: 10,
         idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 5000
+        connectionTimeoutMillis: 10000
     });
+    state.pool.on("error", (err) => {
 
-    try {
-        const client = await state.pool.query("select 1")
-        Logger.info("Successfully established a connection to PostgreSQL");
-    } catch (err) {
-        Logger.error("Failed to connect to the database on startup:", err.message);
-        throw err; 
-    }
-
-    state.pool.on("error", (err: any) => {
-        Logger.error("PostgreSQL pool error:", err);
+        Logger.error("PostgreSQL pool error:", err.message);
     });
+    await state.pool.query("SELECT 1");
+
 
     Logger.info("Successfully connected to the database");
     return;
