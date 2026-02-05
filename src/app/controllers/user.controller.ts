@@ -1,9 +1,9 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 import Logger from '../../config/logger'
 import * as User from '../models/user.model'
 import * as schemas from '../resources/schemas.json'
-import {uid} from "rand-token"
-import {validate} from '../services/validator'
+import { uid } from "rand-token"
+import { validate } from '../services/validator'
 import * as password from "../services/password";
 
 const register = async (req: Request, res: Response) => {
@@ -16,7 +16,7 @@ const register = async (req: Request, res: Response) => {
         }
         req.body.password = await password.hash(req.body.password)
         const result = await User.register(req.body)
-        res.status(201).send({userID: result.id})
+        res.status(201).send({ userID: result.id })
         return
     } catch (err) {
         Logger.error(err)
@@ -36,7 +36,7 @@ const register = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
     try {
         const validation = await validate(schemas.user_login, req.body)
-        if (validation !== true ) {
+        if (validation !== true) {
             res.statusMessage = `Bad Request: ${validation.toString()}`
             res.status(400).send()
             return
@@ -54,7 +54,7 @@ const login = async (req: Request, res: Response) => {
         }
         const token = uid(64)
         await User.login(user.id, token)
-        res.status(200).send({userId: user.id, userToken: token})
+        res.status(200).send({ userId: user.id, userToken: token })
         return
     } catch (err) {
         Logger.error(err.toString())
@@ -69,7 +69,7 @@ const logout = async (req: Request, res: Response) => {
     try {
         const userId = req.authId
         const result = await User.logout(userId)
-        res.status(200).send({userId: result.id})
+        res.status(200).send({ userId: result.id })
         return
 
     } catch (err) {
@@ -98,9 +98,8 @@ const viewUser = async (req: Request, res: Response) => {
         return
 
     } catch (err) {
-        Logger.error(err.toString())
-        res.statusMessage = "Internal Server Error"
-        res.status(500).send()
+        Logger.error("DB query failed:", err);
+        res.status(500).json({ error: "Database error" });
         return
     }
 
@@ -115,12 +114,12 @@ const getFullName = async (req: Request, res: Response) => {
             return
         }
         const user = await User.view(id)
-        if(user === null) {
+        if (user === null) {
             res.statusMessage = `User does not exist`
             res.status(404).send()
             return
         }
-        res.status(200).send({fullName: `${user.first_name} ${user.last_name}`})
+        res.status(200).send({ fullName: `${user.first_name} ${user.last_name}` })
         return
 
 
@@ -141,13 +140,6 @@ const update = async (req: Request, res: Response) => {
             res.status(400).send()
             return
         }
-        // const user = await User.findUserById(id)
-        // if (user === null) {
-        //     res.statusMessage = `User does not exist`
-        //     res.status(404).send()
-        //     return
-        // }
-
         if (req.authId !== id) {
             res.statusMessage = `You do not have the authority`
             res.status(403).send()
@@ -159,28 +151,6 @@ const update = async (req: Request, res: Response) => {
             res.status(400).send()
             return
         }
-
-        // if (req.body.hasOwnProperty("email")) {
-        //     user.email = req.body.email
-        // }
-        // if (req.body.hasOwnProperty("title")) {
-        //     user.title = req.body.title
-        // }
-        // if (req.body.hasOwnProperty("description")) {
-        //     user.description = req.body.description
-        // }
-        // if (req.body.hasOwnProperty("physicalAddress")) {
-        //     user.physicalAddress = req.body.physicalAddress
-        // }
-        // if (req.body.hasOwnProperty("phoneNumber")) {
-        //     user.phoneNumber = req.body.phoneNumber
-        // }
-        // if (req.body.hasOwnProperty("firstName")) {
-        //     user.firstName = req.body.firstName
-        // }
-        // if (req.body.hasOwnProperty("lastName")) {
-        //     user.lastName = req.body.lastName
-        // }
         await User.updateUserPartial(req.body, id)
         res.status(200).send()
         return
@@ -240,4 +210,4 @@ const updatePassword = async (req: Request, res: Response) => {
     }
 }
 
-export {register, login, viewUser, logout, update, updatePassword, getFullName}
+export { register, login, viewUser, logout, update, updatePassword, getFullName }

@@ -24,13 +24,12 @@ const connect = async () => {
         ssl: {
             rejectUnauthorized: false
         },
-        max: 10,
+        max: 5,
         idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 10000
+        connectionTimeoutMillis: 5000
     });
-    state.pool.on("error", (err) => {
-
-        Logger.error("PostgreSQL pool error:", err.message);
+    state.pool.on("error", (err: any) => {
+        Logger.error("PostgreSQL pool error:", err);
     });
 
     Logger.info("Successfully connected to the database");
