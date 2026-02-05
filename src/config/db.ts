@@ -5,7 +5,13 @@ import Logger from "./logger"
 
 
 // Load environment variables into process.env
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+    dotenv.config();
+}
+
+if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not set");
+}
 
 const state = {
     pool: null as Pool | null
@@ -26,8 +32,6 @@ const connect = async () => {
 
         Logger.error("PostgreSQL pool error:", err.message);
     });
-    await state.pool.query("SELECT 1");
-
 
     Logger.info("Successfully connected to the database");
     return;
