@@ -3,7 +3,6 @@ import { Pool } from "pg";
 import Logger from "./logger"
 
 
-
 // Load environment variables into process.env
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
@@ -28,14 +27,12 @@ const connect = async () => {
     });
 
     try {
-        const client = await state.pool.query('SELECT version()')
+        const client = await state.pool.query("select 1")
         Logger.info("Successfully established a connection to PostgreSQL");
     } catch (err) {
-        Logger.error("Failed to connect to the database on startup:", err);
+        Logger.error("Failed to connect to the database on startup:", err.message);
         throw err; 
     }
-
-    
 
     state.pool.on("error", (err: any) => {
         Logger.error("PostgreSQL pool error:", err);
