@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as User from "../models/user.model";
-import { readImage, removeImage, generateImageName } from "../models/image.model";
+import  crypto  from "crypto";
 import Logger from "../../config/logger";
 import { getImageExtension } from "../models/imageTools"
 import { uploadImageToR2, deleteImageFromR2 } from "../services/r2_service";
@@ -68,7 +68,8 @@ const setImage = async (req: Request, res: Response) => {
             await deleteImageFromR2({ filePath: oldImageUrl })
             isNew = false
         }
-        const newFilename = `${id}`+imageExt
+        const imageName = crypto.randomBytes(16).toString("base64url")
+        const newFilename = `${imageName}`+imageExt
         const newImageUrl = `profile/${newFilename}`
         let code = 0
         if (isNew) {
