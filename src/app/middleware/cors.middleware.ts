@@ -12,14 +12,16 @@ export default (req: Request, res: Response, next: () => void) => {
         res.header('Access-Control-Allow-Origin', origin);
     }
 
-    if (requestedWith !== 'KevWebsite.Frontend') {
-        return res.status(403).json({ message: "Forbidden: Invalid request source" });
-    }
+
 
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Authorization');
     res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH');
     if (req.method === 'OPTIONS') {
         return res.sendStatus(204);
+    }
+
+    if (requestedWith !== 'KevWebsite.Frontend') {
+        return res.status(403).json({ message: "Forbidden: Invalid request source" });
     }
     next();
 }
