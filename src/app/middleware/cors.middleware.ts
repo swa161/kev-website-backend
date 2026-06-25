@@ -7,8 +7,13 @@ const allowedOrigins = [
 
 export default (req: Request, res: Response, next: () => void) => {
     const origin = req.headers.origin as string
+    const requestedWith = req.headers['x-requested-with'] as string
     if (allowedOrigins.includes(origin)) {
         res.header('Access-Control-Allow-Origin', origin);
+    }
+
+    if (requestedWith !== 'KevWebsite.Frontend') {
+        return res.status(403).json({ message: "Forbidden: Invalid request source" });
     }
 
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Authorization');
